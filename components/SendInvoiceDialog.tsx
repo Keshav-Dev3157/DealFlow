@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Loader2, Mail, Send } from "lucide-react";
 import { sendInvoiceEmail } from "@/app/actions";
 import {
@@ -25,6 +25,11 @@ interface SendInvoiceDialogProps {
 export default function SendInvoiceDialog({ deal }: SendInvoiceDialogProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -75,7 +80,7 @@ export default function SendInvoiceDialog({ deal }: SendInvoiceDialogProps) {
 
                         <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 text-sm text-slate-600">
                             <p className="font-bold text-slate-900 mb-1">Preview Message:</p>
-                            &quot;Hi, please find attached the invoice for {deal.brand_name} campaign. Payment is due by {deal.due_date ? new Date(deal.due_date).toLocaleDateString() : '30 days'}.&quot;
+                            &quot;Hi, please find attached the invoice for {deal.brand_name} campaign. Payment is due by {mounted && deal.due_date ? new Date(deal.due_date).toLocaleDateString() : '30 days'}.&quot;
                         </div>
                     </div>
 

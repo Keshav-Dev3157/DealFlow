@@ -2,6 +2,7 @@
 
 import { Deal, DealStatus } from "@/types";
 import { BadgeDollarSign, Mail, User, FileText, CalendarDays, ChevronRight } from "lucide-react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
@@ -35,6 +36,11 @@ const statusLabels: Record<Deal["status"], string> = {
 
 export default function DealCard({ deal, onStatusChange }: DealCardProps) {
     const isInvoiced = deal.status === "paid";
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     return (
         <motion.div
@@ -117,7 +123,7 @@ export default function DealCard({ deal, onStatusChange }: DealCardProps) {
                         {deal.due_date && (
                             <div className="flex items-center text-[10px] text-slate-400 mt-1 uppercase tracking-tight font-bold">
                                 <CalendarDays size={10} className="mr-1" />
-                                {new Date(deal.due_date).toLocaleDateString()}
+                                {mounted ? new Date(deal.due_date).toLocaleDateString() : "---"}
                             </div>
                         )}
                     </div>
