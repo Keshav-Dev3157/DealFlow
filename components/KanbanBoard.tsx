@@ -78,15 +78,7 @@ export default function KanbanBoard({ deals: initialDeals }: KanbanBoardProps) {
         setActiveId(event.active.id as string);
     }
 
-    async function handleDragEnd(event: DragEndEvent) {
-        const { active, over } = event;
-        setActiveId(null);
-
-        if (!over) return;
-
-        const dealId = active.id as string;
-        const newStatus = over.id as DealStatus;
-
+    async function handleStatusChange(dealId: string, newStatus: DealStatus) {
         const deal = deals.find((d) => d.id === dealId);
         if (!deal || deal.status === newStatus) return;
 
@@ -106,6 +98,18 @@ export default function KanbanBoard({ deals: initialDeals }: KanbanBoardProps) {
         } else {
             toast.success("Status updated!");
         }
+    }
+
+    async function handleDragEnd(event: DragEndEvent) {
+        const { active, over } = event;
+        setActiveId(null);
+
+        if (!over) return;
+
+        const dealId = active.id as string;
+        const newStatus = over.id as DealStatus;
+
+        handleStatusChange(dealId, newStatus);
     }
 
     return (
@@ -129,8 +133,8 @@ export default function KanbanBoard({ deals: initialDeals }: KanbanBoardProps) {
                         key={column.id}
                         onClick={() => setActiveTab(column.id)}
                         className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-black uppercase tracking-tighter transition-all ${activeTab === column.id
-                                ? `${column.color} text-white shadow-lg`
-                                : "text-slate-400 hover:text-slate-600 hover:bg-slate-50"
+                            ? `${column.color} text-white shadow-lg`
+                            : "text-slate-400 hover:text-slate-600 hover:bg-slate-50"
                             }`}
                     >
                         {column.title}
@@ -150,6 +154,7 @@ export default function KanbanBoard({ deals: initialDeals }: KanbanBoardProps) {
                             color={column.color}
                             statusId={column.id}
                             deals={filteredDeals.filter((d) => d.status === column.id)}
+                            onStatusChange={handleStatusChange}
                         />
                     </div>
                 ))}
@@ -158,7 +163,7 @@ export default function KanbanBoard({ deals: initialDeals }: KanbanBoardProps) {
             <DragOverlay>
                 {activeDeal ? (
                     <div className="rotate-3 scale-105">
-                        <DealCard deal={activeDeal} />
+                        <DealCard deal={activeDeal} onStatusChange={handleStatusChange} />
                     </div>
                 ) : null}
             </DragOverlay>

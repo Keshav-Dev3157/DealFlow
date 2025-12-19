@@ -11,6 +11,7 @@ interface KanbanColumnProps {
     color: string;
     statusId: DealStatus;
     deals: Deal[];
+    onStatusChange: (dealId: string, newStatus: DealStatus) => Promise<void>;
 }
 
 const columnIcons: Record<string, React.ReactNode> = {
@@ -19,7 +20,7 @@ const columnIcons: Record<string, React.ReactNode> = {
     Paid: <DollarSign size={14} />,
 };
 
-export default function KanbanColumn({ title, color, statusId, deals }: KanbanColumnProps) {
+export default function KanbanColumn({ title, color, statusId, deals, onStatusChange }: KanbanColumnProps) {
     const { setNodeRef, isOver } = useDroppable({
         id: statusId,
     });
@@ -56,7 +57,7 @@ export default function KanbanColumn({ title, color, statusId, deals }: KanbanCo
                     </div>
                 ) : (
                     deals.map((deal) => (
-                        <DraggableDealCard key={deal.id} deal={deal} />
+                        <DraggableDealCard key={deal.id} deal={deal} onStatusChange={onStatusChange} />
                     ))
                 )}
             </div>

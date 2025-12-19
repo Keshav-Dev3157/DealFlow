@@ -1,16 +1,24 @@
 'use client'
 
-import { Deal } from "@/types";
-import { BadgeDollarSign, Mail, User, FileText, CalendarDays } from "lucide-react";
+import { Deal, DealStatus } from "@/types";
+import { BadgeDollarSign, Mail, User, FileText, CalendarDays, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import EditDealDialog from "./EditDealDialog";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface DealCardProps {
     deal: Deal;
+    onStatusChange: (dealId: string, newStatus: DealStatus) => Promise<void>;
 }
 
 const statusVariants: Record<Deal["status"], "default" | "secondary" | "outline" | "destructive"> = {
@@ -25,7 +33,7 @@ const statusLabels: Record<Deal["status"], string> = {
     paid: "Paid",
 };
 
-export default function DealCard({ deal }: DealCardProps) {
+export default function DealCard({ deal, onStatusChange }: DealCardProps) {
     const isInvoiced = deal.status === "paid";
 
     return (
@@ -45,7 +53,42 @@ export default function DealCard({ deal }: DealCardProps) {
                             {statusLabels[deal.status]}
                         </Badge>
                         <div className="flex items-center gap-2">
-                            <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                            {/* Mobile Move Button */}
+                            <div className="md:hidden">
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400">
+                                            <ChevronRight size={18} />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end" className="w-40 rounded-xl shadow-xl">
+                                        <DropdownMenuLabel className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Move to Stage</DropdownMenuLabel>
+                                        <DropdownMenuItem
+                                            disabled={deal.status === "lead"}
+                                            onClick={() => onStatusChange(deal.id, "lead")}
+                                            className="font-bold text-slate-700"
+                                        >
+                                            Lead
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            disabled={deal.status === "working"}
+                                            onClick={() => onStatusChange(deal.id, "working")}
+                                            className="font-bold text-slate-700"
+                                        >
+                                            Working
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            disabled={deal.status === "paid"}
+                                            onClick={() => onStatusChange(deal.id, "paid")}
+                                            className="font-bold text-slate-700"
+                                        >
+                                            Paid
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </div>
+
+                            <div className="opacity-0 group-hover:opacity-100 transition-opacity hidden md:block">
                                 <EditDealDialog deal={deal} />
                             </div>
                             <div className="text-slate-300 group-hover:text-indigo-400 transition-colors">

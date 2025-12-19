@@ -1,15 +1,16 @@
 'use client'
 
 import { useDraggable } from "@dnd-kit/core";
-import { Deal } from "@/types";
+import { Deal, DealStatus } from "@/types";
 import DealCard from "./DealCard";
 import { GripVertical } from "lucide-react";
 
 interface DraggableDealCardProps {
     deal: Deal;
+    onStatusChange: (dealId: string, newStatus: DealStatus) => Promise<void>;
 }
 
-export default function DraggableDealCard({ deal }: DraggableDealCardProps) {
+export default function DraggableDealCard({ deal, onStatusChange }: DraggableDealCardProps) {
     const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
         id: deal.id,
     });
@@ -37,7 +38,7 @@ export default function DraggableDealCard({ deal }: DraggableDealCardProps) {
                 </div>
             </div>
 
-            <DealCard deal={deal} />
+            <DealCard deal={deal} onStatusChange={onStatusChange} />
         </div>
     );
 }
