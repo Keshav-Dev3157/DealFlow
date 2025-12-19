@@ -128,16 +128,7 @@ export default function LoginPage() {
                         </button>
                     </form>
 
-                    <div className="mt-8 flex items-center gap-4">
-                        <div className="h-px bg-zinc-800 flex-1" />
-                        <span className="text-zinc-600 text-xs font-bold uppercase tracking-widest">Or continue with</span>
-                        <div className="h-px bg-zinc-800 flex-1" />
-                    </div>
 
-                    <button className="w-full mt-6 py-3 bg-zinc-800 border border-zinc-700 text-white font-semibold rounded-xl hover:bg-zinc-700 transition-all flex items-center justify-center gap-3">
-                        <Github size={20} />
-                        GitHub
-                    </button>
                 </div>
 
                 <p className="mt-8 text-center text-zinc-500 text-sm">
