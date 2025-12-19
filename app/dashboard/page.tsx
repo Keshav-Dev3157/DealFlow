@@ -48,23 +48,23 @@ export default async function DashboardPage() {
     return (
         <div className="min-h-screen bg-zinc-50/50 selection:bg-indigo-500/30">
             {/* Sticky Glass Header */}
-            <header className="sticky top-0 z-30 w-full border-b border-slate-200/60 bg-white/70 backdrop-blur-xl px-8 py-4">
+            <header className="sticky top-0 z-30 w-full border-b border-slate-200/60 bg-white/70 backdrop-blur-xl px-4 md:px-8 py-3 md:py-4">
                 <div className="max-w-7xl mx-auto flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-200">
-                            <LayoutDashboard className="text-white" size={20} />
+                    <div className="flex items-center gap-2 md:gap-3">
+                        <div className="w-8 h-8 md:w-10 md:h-10 bg-indigo-600 rounded-lg md:rounded-xl flex items-center justify-center shadow-lg shadow-indigo-200">
+                            <LayoutDashboard className="text-white" size={16} />
                         </div>
                         <div>
-                            <h1 className="text-xl font-black text-slate-900 tracking-tight leading-tight uppercase italic">
+                            <h1 className="text-lg md:text-xl font-black text-slate-900 tracking-tight leading-tight uppercase italic">
                                 DEALFLOW
                             </h1>
-                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest -mt-0.5">
+                            <p className="hidden md:block text-[10px] font-bold text-slate-400 uppercase tracking-widest -mt-0.5">
                                 Dashboard &bull; Beta
                             </p>
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2 md:gap-4">
                         <NewDealDialog />
 
                         <DropdownMenu>
