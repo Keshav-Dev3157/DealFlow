@@ -1,8 +1,9 @@
 'use client'
 
 import { Deal, DealStatus } from "@/types";
-import { BadgeDollarSign, Mail, User, FileText, CalendarDays, ChevronRight } from "lucide-react";
+import { BadgeDollarSign, Mail, User, FileText, CalendarDays, ChevronRight, Copy } from "lucide-react";
 import { useState, useEffect } from "react";
+import { toast } from "sonner";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
@@ -41,6 +42,12 @@ export default function DealCard({ deal, onStatusChange }: DealCardProps) {
     useEffect(() => {
         setMounted(true);
     }, []);
+
+    const handleCopyLink = () => {
+        const url = `${window.location.origin}/invoices/${deal.id}`;
+        navigator.clipboard.writeText(url);
+        toast.success("Invoice link copied to clipboard!");
+    };
 
     return (
         <motion.div
@@ -90,10 +97,29 @@ export default function DealCard({ deal, onStatusChange }: DealCardProps) {
                                         >
                                             Paid
                                         </DropdownMenuItem>
+                                        <div className="h-px bg-slate-100 my-1" />
+                                        <DropdownMenuItem
+                                            onClick={handleCopyLink}
+                                            className="font-bold text-indigo-600 focus:text-indigo-700"
+                                        >
+                                            <Copy size={14} className="mr-2" />
+                                            Copy Link
+                                        </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </div>
 
+                            <div className="opacity-0 group-hover:opacity-100 transition-opacity hidden md:block">
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8 text-slate-400 hover:text-indigo-600"
+                                    onClick={handleCopyLink}
+                                    title="Copy Invoice Link"
+                                >
+                                    <Copy size={16} />
+                                </Button>
+                            </div>
                             <div className="opacity-0 group-hover:opacity-100 transition-opacity hidden md:block">
                                 <EditDealDialog deal={deal} />
                             </div>

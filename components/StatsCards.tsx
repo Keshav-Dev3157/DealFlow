@@ -9,90 +9,76 @@ interface StatsCardsProps {
 }
 
 export default function StatsCards({ deals }: StatsCardsProps) {
-    // 1. Total Revenue (Paid Deals)
-    const totalRevenue = deals
+    // 1. Total Earned (Paid Deals)
+    const totalEarned = deals
         .filter(d => d.status === "paid")
         .reduce((sum, d) => sum + d.price, 0);
 
-    // 2. Pipeline Value (Lead + Working)
-    const pipelineValue = deals
-        .filter(d => d.status === "lead" || d.status === "working")
+    // 2. Pending Invoices (Working Deals)
+    const pendingInvoices = deals
+        .filter(d => d.status === "working")
         .reduce((sum, d) => sum + d.price, 0);
 
-    // 3. Active Deals (Not Paid)
-    const activeDealsCount = deals.filter(d => d.status !== "paid").length;
-
-    // 4. Average Deal Size (All Deals)
-    const avgDealSize = deals.length > 0
-        ? deals.reduce((sum, d) => sum + d.price, 0) / deals.length
-        : 0;
+    // 3. Potential Revenue (Lead Deals)
+    const potentialRevenue = deals
+        .filter(d => d.status === "lead")
+        .reduce((sum, d) => sum + d.price, 0);
 
     return (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
-            <Card className="rounded-2xl border-none shadow-md bg-white/50 backdrop-blur-sm">
+        <div className="grid gap-6 md:grid-cols-3 mb-8">
+            <Card className="rounded-[32px] border-none shadow-xl shadow-emerald-100/50 bg-white overflow-hidden group">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-bold text-emerald-600 uppercase tracking-wider">
-                        Total Revenue
+                    <CardTitle className="text-xs font-black text-emerald-600 uppercase tracking-widest">
+                        Total Earned
                     </CardTitle>
-                    <DollarSign className="h-4 w-4 text-emerald-600" />
+                    <div className="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600">
+                        <DollarSign className="h-4 w-4" />
+                    </div>
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-black text-slate-900">
-                        ${totalRevenue.toLocaleString()}
+                    <div className="text-4xl font-black text-emerald-600 tracking-tighter">
+                        ${totalEarned.toLocaleString()}
                     </div>
-                    <p className="text-xs text-slate-500 font-bold mt-1">
-                        +100% from last month
+                    <p className="text-[10px] text-slate-400 font-bold mt-2 uppercase tracking-widest">
+                        Verified Income
                     </p>
                 </CardContent>
             </Card>
 
-            <Card className="rounded-2xl border-none shadow-md bg-white/50 backdrop-blur-sm">
+            <Card className="rounded-[32px] border-none shadow-xl shadow-amber-100/50 bg-white overflow-hidden">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-bold text-indigo-600 uppercase tracking-wider">
-                        Pipeline Value
+                    <CardTitle className="text-xs font-black text-amber-600 uppercase tracking-widest">
+                        Pending Invoices
                     </CardTitle>
-                    <TrendingUp className="h-4 w-4 text-indigo-600" />
+                    <div className="w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center text-amber-600">
+                        <TrendingUp className="h-4 w-4" />
+                    </div>
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-black text-slate-900">
-                        ${pipelineValue.toLocaleString()}
+                    <div className="text-4xl font-black text-slate-900 tracking-tighter">
+                        ${pendingInvoices.toLocaleString()}
                     </div>
-                    <p className="text-xs text-slate-500 font-bold mt-1">
-                        Potential earnings
+                    <p className="text-[10px] text-slate-400 font-bold mt-2 uppercase tracking-widest">
+                        In progress &bull; {deals.filter(d => d.status === "working").length} deals
                     </p>
                 </CardContent>
             </Card>
 
-            <Card className="rounded-2xl border-none shadow-md bg-white/50 backdrop-blur-sm">
+            <Card className="rounded-[32px] border-none shadow-xl shadow-indigo-100/50 bg-white overflow-hidden">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-bold text-amber-600 uppercase tracking-wider">
-                        Active Deals
+                    <CardTitle className="text-xs font-black text-indigo-600 uppercase tracking-widest">
+                        Potential Revenue
                     </CardTitle>
-                    <Activity className="h-4 w-4 text-amber-600" />
+                    <div className="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600">
+                        <Activity className="h-4 w-4" />
+                    </div>
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-black text-slate-900">
-                        {activeDealsCount}
+                    <div className="text-4xl font-black text-slate-900 tracking-tighter">
+                        ${potentialRevenue.toLocaleString()}
                     </div>
-                    <p className="text-xs text-slate-500 font-bold mt-1">
-                        Deals in progress
-                    </p>
-                </CardContent>
-            </Card>
-
-            <Card className="rounded-2xl border-none shadow-md bg-white/50 backdrop-blur-sm">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-bold text-slate-600 uppercase tracking-wider">
-                        Avg. Deal Size
-                    </CardTitle>
-                    <CreditCard className="h-4 w-4 text-slate-600" />
-                </CardHeader>
-                <CardContent>
-                    <div className="text-2xl font-black text-slate-900">
-                        ${avgDealSize.toLocaleString(undefined, { maximumFractionDigits: 0 })}
-                    </div>
-                    <p className="text-xs text-slate-500 font-bold mt-1">
-                        Per campaign
+                    <p className="text-[10px] text-slate-400 font-bold mt-2 uppercase tracking-widest">
+                        From leads &bull; {deals.filter(d => d.status === "lead").length} deals
                     </p>
                 </CardContent>
             </Card>
