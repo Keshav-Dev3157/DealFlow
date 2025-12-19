@@ -15,6 +15,13 @@ interface InvoicePageProps {
 
 export default async function InvoicePage({ params }: InvoicePageProps) {
     const { id } = await params;
+
+    // Validate UUID format to prevent database errors and ensure robustness
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(id)) {
+        return notFound();
+    }
+
     const supabase = await createClient();
 
     // Fetch deal
@@ -43,7 +50,7 @@ export default async function InvoicePage({ params }: InvoicePageProps) {
         : new Date().toLocaleDateString();
 
     return (
-        <div className="min-h-screen bg-slate-100 py-10 print:py-0 print:bg-white">
+        <div className="min-h-screen bg-slate-100 py-10 print:py-0 print:bg-white print:min-h-0">
             <div className="max-w-4xl mx-auto px-4 sm:px-6">
                 {/* Header Actions */}
                 <div className="flex justify-between items-center mb-6 print:hidden">
@@ -62,9 +69,9 @@ export default async function InvoicePage({ params }: InvoicePageProps) {
 
                 {/* Paper Container */}
                 <AnimatedSection y={40} duration={0.6}>
-                    <div className="bg-white shadow-2xl rounded-sm p-8 md:p-16 min-h-0 md:min-h-[1100px] print:shadow-none print:p-0 print:min-h-0 relative overflow-hidden">
+                    <div className="bg-white shadow-2xl rounded-sm p-8 md:p-16 min-h-0 md:min-h-[1100px] print:shadow-none print:p-8 print:min-h-0 relative overflow-hidden border print:border-slate-200">
                         {/* Decorative Top Border */}
-                        <div className="absolute top-0 left-0 right-0 h-4 bg-indigo-600 print:bg-black"></div>
+                        <div className="absolute top-0 left-0 right-0 h-2 bg-indigo-600 print:bg-slate-900 print:h-1"></div>
 
                         {/* Top Section: Header & Date */}
                         <div className="flex flex-col md:flex-row justify-between items-start gap-8 mb-12 md:mb-20 mt-4">
@@ -150,7 +157,7 @@ export default async function InvoicePage({ params }: InvoicePageProps) {
                         {/* Footer: Payment & Total */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-start pb-24 md:pb-32">
                             {/* Payment Details */}
-                            <div className="bg-indigo-50/50 p-6 md:p-8 rounded-2xl border border-indigo-100 print:bg-transparent print:border-slate-200 order-2 md:order-1">
+                            <div className="bg-indigo-50/50 p-6 md:p-8 rounded-2xl border border-indigo-100 print:bg-white print:border-slate-300 order-2 md:order-1">
                                 <h4 className="text-xs uppercase font-bold text-indigo-900 tracking-widest mb-4 flex items-center gap-2">
                                     <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
                                     Payment Methods
