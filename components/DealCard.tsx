@@ -56,51 +56,58 @@ export default function DealCard({ deal, onStatusChange }: DealCardProps) {
             whileHover={{ y: -4 }}
             transition={{ duration: 0.3 }}
         >
-            <Card className="overflow-hidden border-slate-200/60 shadow-sm hover:shadow-md transition-all duration-300 bg-white/50 backdrop-blur-sm group">
+            <Card className="overflow-hidden border-border shadow-sm hover:shadow-md transition-all duration-300 bg-card/50 backdrop-blur-sm group">
                 <CardHeader className="p-5 pb-0">
                     <div className="flex justify-between items-start">
-                        <Badge
-                            variant={statusVariants[deal.status]}
-                            className="font-bold uppercase tracking-wider text-[10px] px-2 py-0"
-                        >
-                            {statusLabels[deal.status]}
-                        </Badge>
+                        <div className="flex items-center gap-2">
+                            <Badge
+                                variant={statusVariants[deal.status]}
+                                className="font-bold uppercase tracking-wider text-[10px] px-2 py-0"
+                            >
+                                {statusLabels[deal.status]}
+                            </Badge>
+                            {deal.platform && (
+                                <Badge variant="outline" className="font-bold uppercase tracking-wider text-[10px] px-2 py-0 border-primary/20 bg-primary/5 text-primary">
+                                    {deal.platform}
+                                </Badge>
+                            )}
+                        </div>
                         <div className="flex items-center gap-2">
                             {/* Mobile Move Button */}
                             <div className="md:hidden">
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
-                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400">
+                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground">
                                             <ChevronRight size={18} />
                                         </Button>
                                     </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end" className="w-40 rounded-xl shadow-xl">
-                                        <DropdownMenuLabel className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Move to Stage</DropdownMenuLabel>
+                                    <DropdownMenuContent align="end" className="w-40 rounded-xl shadow-xl border-border bg-card">
+                                        <DropdownMenuLabel className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Move to Stage</DropdownMenuLabel>
                                         <DropdownMenuItem
                                             disabled={deal.status === "lead"}
                                             onClick={() => onStatusChange(deal.id, "lead")}
-                                            className="font-bold text-slate-700"
+                                            className="font-bold text-foreground"
                                         >
                                             Lead
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
                                             disabled={deal.status === "working"}
                                             onClick={() => onStatusChange(deal.id, "working")}
-                                            className="font-bold text-slate-700"
+                                            className="font-bold text-foreground"
                                         >
                                             Working
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
                                             disabled={deal.status === "paid"}
                                             onClick={() => onStatusChange(deal.id, "paid")}
-                                            className="font-bold text-slate-700"
+                                            className="font-bold text-foreground"
                                         >
                                             Paid
                                         </DropdownMenuItem>
-                                        <div className="h-px bg-slate-100 my-1" />
+                                        <div className="h-px bg-border my-1" />
                                         <DropdownMenuItem
                                             onClick={handleCopyLink}
-                                            className="font-bold text-indigo-600 focus:text-indigo-700"
+                                            className="font-bold text-indigo-600 dark:text-indigo-400 focus:text-indigo-700 dark:focus:text-indigo-300"
                                         >
                                             <Copy size={14} className="mr-2" />
                                             Copy Link
@@ -113,7 +120,7 @@ export default function DealCard({ deal, onStatusChange }: DealCardProps) {
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    className="h-8 w-8 text-slate-400 hover:text-indigo-600"
+                                    className="h-8 w-8 text-muted-foreground hover:text-indigo-600 dark:hover:text-indigo-400"
                                     onClick={handleCopyLink}
                                     title="Copy Invoice Link"
                                 >
@@ -123,31 +130,31 @@ export default function DealCard({ deal, onStatusChange }: DealCardProps) {
                             <div className="opacity-0 group-hover:opacity-100 transition-opacity hidden md:block">
                                 <EditDealDialog deal={deal} />
                             </div>
-                            <div className="text-slate-300 group-hover:text-indigo-400 transition-colors">
+                            <div className="text-muted-foreground group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                                 <User size={18} />
                             </div>
                         </div>
                     </div>
-                    <h3 className="text-lg font-bold text-slate-900 mt-3 truncate group-hover:text-indigo-600 transition-colors">
+                    <h3 className="text-lg font-bold text-foreground mt-3 truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                         {deal.brand_name}
                     </h3>
                 </CardHeader>
 
                 <CardContent className="p-5 pt-2">
-                    <div className="flex items-center text-slate-500 text-sm">
+                    <div className="flex items-center text-muted-foreground text-sm">
                         <Mail size={14} className="mr-2 opacity-70" />
                         <span className="truncate">{deal.contact_email}</span>
                     </div>
                 </CardContent>
 
-                <CardFooter className="p-5 pt-0 flex items-center justify-between border-t border-slate-50/50 bg-slate-50/30">
+                <CardFooter className="p-5 pt-0 flex items-center justify-between border-t border-border bg-secondary/30">
                     <div className="flex flex-col">
-                        <div className="flex items-center text-slate-900 font-bold">
-                            <BadgeDollarSign size={16} className="mr-1 text-emerald-600" />
+                        <div className="flex items-center text-foreground font-bold">
+                            <BadgeDollarSign size={16} className="mr-1 text-emerald-600 dark:text-emerald-400" />
                             <span>${deal.price.toLocaleString()}</span>
                         </div>
                         {deal.due_date && (
-                            <div className="flex items-center text-[10px] text-slate-400 mt-1 uppercase tracking-tight font-bold">
+                            <div className="flex items-center text-[10px] text-muted-foreground mt-1 uppercase tracking-tight font-bold">
                                 <CalendarDays size={10} className="mr-1" />
                                 {mounted ? new Date(deal.due_date).toLocaleDateString() : "---"}
                             </div>
@@ -159,7 +166,7 @@ export default function DealCard({ deal, onStatusChange }: DealCardProps) {
                             asChild
                             variant="secondary"
                             size="sm"
-                            className="h-8 gap-1.5 font-bold text-xs shadow-none border hover:bg-white hover:text-indigo-600 transition-all active:scale-95"
+                            className="h-8 gap-1.5 font-bold text-xs shadow-none border border-border hover:bg-background hover:text-indigo-600 dark:hover:text-indigo-400 transition-all active:scale-95"
                         >
                             <Link href={`/invoices/${deal.id}`}>
                                 <FileText size={14} />
@@ -169,6 +176,6 @@ export default function DealCard({ deal, onStatusChange }: DealCardProps) {
                     )}
                 </CardFooter>
             </Card>
-        </motion.div>
+        </motion.div >
     );
 }

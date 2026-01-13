@@ -22,6 +22,7 @@ export async function createDeal(formData: FormData) {
         const contact_email = formData.get("contact_email") as string;
         const price = parseFloat(formData.get("price") as string);
         const status = formData.get("status") as DealStatus;
+        const platform = formData.get("platform") as string || "Instagram";
         const due_date = formData.get("due_date") as string || null;
 
         const { error } = await supabase.from("deals").insert({
@@ -30,12 +31,31 @@ export async function createDeal(formData: FormData) {
             contact_email,
             price,
             status,
+            platform,
             due_date,
         });
 
         if (error) {
             console.error("Error creating deal:", error);
             return { error: "Failed to create deal: " + error.message };
+        }
+
+        // Auto-spawn default deliverables
+        const { data: newDeal } = await supabase
+            .from("deals")
+            .select("id")
+            .eq("user_id", user.id)
+            .eq("brand_name", brand_name)
+            .order("created_at", { ascending: false })
+            .limit(1)
+            .single();
+
+        if (newDeal) {
+            await supabase.from("deliverables").insert([
+                { deal_id: newDeal.id, label: "Draft submitted" },
+                { deal_id: newDeal.id, label: "Content posted" },
+                { deal_id: newDeal.id, label: "Proof uploaded" },
+            ]);
         }
 
         revalidatePath("/dashboard");
@@ -84,11 +104,12 @@ export async function updateDeal(dealId: string, formData: FormData) {
     const contact_email = formData.get("contact_email") as string;
     const price = parseFloat(formData.get("price") as string);
     const status = formData.get("status") as DealStatus;
+    const platform = formData.get("platform") as string || "Instagram";
     const due_date = formData.get("due_date") as string || null;
 
     const { error } = await supabase
         .from("deals")
-        .update({ brand_name, contact_email, price, status, due_date })
+        .update({ brand_name, contact_email, price, status, platform, due_date })
         .eq("id", dealId)
         .eq("user_id", user.id);
 
@@ -136,6 +157,12 @@ export async function updateProfile(formData: FormData) {
 
     const full_name = formData.get("full_name") as string || null;
     const payment_details = formData.get("payment_details") as string || null;
+    const instagram_handle = formData.get("instagram_handle") as string || null;
+    const tiktok_handle = formData.get("tiktok_handle") as string || null;
+    const bank_name = formData.get("bank_name") as string || null;
+    const account_number = formData.get("account_number") as string || null;
+    const routing_number = formData.get("routing_number") as string || null;
+    const revenue_goal = parseFloat(formData.get("revenue_goal") as string) || 0;
 
     const { error } = await supabase
         .from("profiles")
@@ -143,6 +170,12 @@ export async function updateProfile(formData: FormData) {
             id: user.id,
             full_name,
             payment_details,
+            instagram_handle,
+            tiktok_handle,
+            bank_name,
+            account_number,
+            routing_number,
+            revenue_goal,
             updated_at: new Date().toISOString(),
         });
 
@@ -200,7 +233,7 @@ export async function sendInvoiceEmail(dealId: string, formData: FormData) {
         const resend = new Resend(apiKey);
 
         const { error } = await resend.emails.send({
-            from: 'DealFlow <onboarding@resend.dev>', // Use default Resend testing domain
+            from: 'VibeFlow <onboarding@resend.dev>', // Use default Resend testing domain
             to: [recipientEmail],
             subject: `Invoice: ${deal.brand_name} Campaign`,
             html: `
@@ -233,9 +266,68 @@ export async function sendInvoiceEmail(dealId: string, formData: FormData) {
             return { error: "Failed to send email." };
         }
 
+        revalidatePath("/dashboard");
         return { success: true };
     } catch (error: any) {
         console.error("Email error:", error);
         return { error: "Something went wrong sending the email." };
     }
+}
+
+// DELIVERABLES ACTIONS
+export async function addDeliverable(dealId: string, label: string) {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { error: "Not authenticated" };
+
+    const { error } = await supabase.from("deliverables").insert({
+        deal_id: dealId,
+        label,
+    });
+
+    if (error) return { error: error.message };
+    revalidatePath("/dashboard");
+    return { success: true };
+}
+
+export async function toggleDeliverable(id: string, completed: boolean) {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { error: "Not authenticated" };
+
+    const { error } = await supabase
+        .from("deliverables")
+        .update({ completed })
+        .eq("id", id);
+
+    if (error) return { error: error.message };
+    revalidatePath("/dashboard");
+    return { success: true };
+}
+
+export async function updateDeliverableProof(id: string, proofUrl: string) {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { error: "Not authenticated" };
+
+    const { error } = await supabase
+        .from("deliverables")
+        .update({ proof_url: proofUrl })
+        .eq("id", id);
+
+    if (error) return { error: error.message };
+    revalidatePath("/dashboard");
+    return { success: true };
+}
+
+export async function deleteDeliverable(id: string) {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { error: "Not authenticated" };
+
+    const { error } = await supabase.from("deliverables").delete().eq("id", id);
+
+    if (error) return { error: error.message };
+    revalidatePath("/dashboard");
+    return { success: true };
 }

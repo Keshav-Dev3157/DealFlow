@@ -1,14 +1,13 @@
 import Hero from "@/components/landing/Hero";
-import FeatureSection from "@/components/landing/FeatureSection";
-import PricingSection from "@/components/landing/PricingSection";
+import StickyScrollReveal from "@/components/landing/StickyScrollReveal";
 import Footer from "@/components/landing/Footer";
+
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-zinc-950">
+    <main className="min-h-screen bg-background">
       <Hero />
-      <FeatureSection />
-      <PricingSection />
+      <StickyScrollReveal />
       <Footer />
     </main>
   );

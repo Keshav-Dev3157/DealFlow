@@ -127,18 +127,18 @@ export default function KanbanBoard({ deals: initialDeals }: KanbanBoardProps) {
             />
 
             {/* Mobile Tab Bar */}
-            <div className="flex md:hidden bg-white border border-slate-200 rounded-2xl p-1.5 mb-6 shadow-sm sticky top-[80px] z-20">
+            <div className="flex md:hidden bg-card border border-border rounded-2xl p-1.5 mb-6 shadow-sm sticky top-[80px] z-20">
                 {columns.map((column) => (
                     <button
                         key={column.id}
                         onClick={() => setActiveTab(column.id)}
                         className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-black uppercase tracking-tighter transition-all ${activeTab === column.id
                             ? `${column.color} text-white shadow-lg`
-                            : "text-slate-400 hover:text-slate-600 hover:bg-slate-50"
+                            : "text-muted-foreground hover:text-foreground hover:bg-zinc-100 dark:hover:bg-zinc-800"
                             }`}
                     >
                         {column.title}
-                        <span className={`px-1.5 py-0.5 rounded-full text-[10px] ${activeTab === column.id ? "bg-white/20" : "bg-slate-100"
+                        <span className={`px-1.5 py-0.5 rounded-full text-[10px] ${activeTab === column.id ? "bg-white/20" : "bg-card border border-border"
                             }`}>
                             {filteredDeals.filter(d => d.status === column.id).length}
                         </span>

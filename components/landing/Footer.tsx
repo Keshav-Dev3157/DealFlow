@@ -12,7 +12,7 @@ export default function Footer() {
                         <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white">
                             <LayoutDashboard size={16} />
                         </div>
-                        <span className="text-lg font-bold text-white tracking-tight">DealFlow</span>
+                        <span className="text-lg font-bold text-white tracking-tight">VibeFlow</span>
                     </div>
 
                     <div className="flex items-center gap-8 text-sm font-medium">

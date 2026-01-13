@@ -33,11 +33,11 @@ export default function KanbanColumn({ title, color, statusId, deals, onStatusCh
                     <div className={`w-8 h-8 ${color} rounded-xl flex items-center justify-center text-white shadow-lg`}>
                         {columnIcons[title]}
                     </div>
-                    <h2 className="font-black text-slate-700 uppercase tracking-tighter italic">
+                    <h2 className="font-black text-foreground uppercase tracking-tighter italic">
                         {title}
                     </h2>
                 </div>
-                <Badge variant="secondary" className="rounded-full font-black px-2.5">
+                <Badge variant="secondary" className="rounded-full font-black px-2.5 bg-secondary text-secondary-foreground">
                     {deals.length}
                 </Badge>
             </div>
@@ -45,13 +45,13 @@ export default function KanbanColumn({ title, color, statusId, deals, onStatusCh
             <div
                 ref={setNodeRef}
                 className={`flex flex-col gap-4 min-h-[500px] p-3 rounded-[32px] border transition-all duration-200 ${isOver
-                    ? "bg-indigo-50/50 border-indigo-300 scale-[1.01]"
-                    : "bg-slate-100/40 border-slate-200/50"
+                    ? "bg-indigo-50/50 dark:bg-indigo-950/20 border-indigo-300 dark:border-indigo-800 scale-[1.01]"
+                    : "bg-secondary/40 border-border"
                     }`}
             >
                 {deals.length === 0 ? (
-                    <div className="flex-1 flex flex-col items-center justify-center border-2 border-dashed border-slate-200/60 rounded-[24px] py-12 opacity-50">
-                        <p className="text-slate-400 text-sm font-bold uppercase tracking-widest">
+                    <div className="flex-1 flex flex-col items-center justify-center border-2 border-dashed border-border rounded-[24px] py-12 opacity-50">
+                        <p className="text-muted-foreground text-sm font-bold uppercase tracking-widest">
                             Drop Here
                         </p>
                     </div>

@@ -3,6 +3,11 @@ CREATE TABLE profiles (
   id UUID REFERENCES auth.users ON DELETE CASCADE PRIMARY KEY,
   full_name TEXT,
   payment_details TEXT,
+  instagram_handle TEXT,
+  tiktok_handle TEXT,
+  bank_name TEXT,
+  account_number TEXT,
+  routing_number TEXT,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 

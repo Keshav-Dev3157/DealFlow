@@ -86,7 +86,7 @@ export default async function InvoicePage({ params }: InvoicePageProps) {
                             <div className="text-left md:text-right w-full md:w-auto">
                                 <div className="inline-block md:block bg-slate-50 p-4 rounded-xl border border-slate-100 w-full md:w-auto">
                                     <p className="text-xs uppercase font-bold text-slate-400 mb-1">Invoice Number</p>
-                                    <p className="text-xl font-mono font-bold text-slate-900">#DF-{typedDeal.id.slice(0, 8).toUpperCase()}</p>
+                                    <p className="text-xl font-mono font-bold text-slate-900">#VF-{typedDeal.id.slice(0, 8).toUpperCase()}</p>
 
                                     <div className="h-px bg-slate-200 my-3"></div>
 
@@ -114,7 +114,12 @@ export default async function InvoicePage({ params }: InvoicePageProps) {
                                     <h2 className="text-2xl md:text-3xl font-serif font-bold text-slate-900 mb-2">
                                         {typedProfile?.full_name || "Influencer Name"}
                                     </h2>
-                                    <p className="text-sm md:text-base text-slate-500 font-medium">Content Creator & Partner</p>
+                                    <div className="flex flex-col gap-1">
+                                        <p className="text-sm md:text-base text-slate-500 font-medium italic">Content Creator & Partner</p>
+                                        {typedProfile?.instagram_handle && (
+                                            <p className="text-xs font-bold text-indigo-600">@{typedProfile.instagram_handle}</p>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
 
@@ -158,11 +163,37 @@ export default async function InvoicePage({ params }: InvoicePageProps) {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-start pb-24 md:pb-32">
                             {/* Payment Details */}
                             <div className="bg-indigo-50/50 p-6 md:p-8 rounded-2xl border border-indigo-100 print:bg-white print:border-slate-300 order-2 md:order-1">
-                                <h4 className="text-xs uppercase font-bold text-indigo-900 tracking-widest mb-4 flex items-center gap-2">
+                                <h4 className="text-xs uppercase font-black text-indigo-900 tracking-widest mb-4 flex items-center gap-2">
                                     <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
-                                    Payment Methods
+                                    Payment Instructions
                                 </h4>
-                                {typedProfile?.payment_details ? (
+
+                                {typedProfile?.bank_name ? (
+                                    <div className="space-y-3">
+                                        <div className="bg-white/60 p-3 rounded-xl border border-indigo-100/50">
+                                            <p className="text-[10px] uppercase font-black text-indigo-400 mb-1">Bank Transfer</p>
+                                            <p className="text-sm font-bold text-slate-800">{typedProfile.bank_name}</p>
+                                            <div className="flex justify-between mt-2 pt-2 border-t border-indigo-50">
+                                                <div>
+                                                    <p className="text-[10px] uppercase font-black text-slate-400">Account No.</p>
+                                                    <p className="text-sm font-mono font-bold text-slate-700">{typedProfile.account_number}</p>
+                                                </div>
+                                                <div className="text-right">
+                                                    <p className="text-[10px] uppercase font-black text-slate-400">IFSC / Routing</p>
+                                                    <p className="text-sm font-mono font-bold text-slate-700">{typedProfile.routing_number}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {typedProfile?.payment_details && (
+                                            <div>
+                                                <p className="text-[10px] uppercase font-black text-slate-400 mb-1 pl-1">Other Methods</p>
+                                                <p className="text-xs text-slate-600 whitespace-pre-line leading-relaxed pl-1">
+                                                    {typedProfile.payment_details}
+                                                </p>
+                                            </div>
+                                        )}
+                                    </div>
+                                ) : typedProfile?.payment_details ? (
                                     <p className="text-slate-700 text-sm whitespace-pre-line leading-7 font-medium">
                                         {typedProfile.payment_details}
                                     </p>
@@ -200,7 +231,7 @@ export default async function InvoicePage({ params }: InvoicePageProps) {
 
                 {/* Support Note */}
                 <p className="mt-8 text-center text-slate-400 text-sm print:hidden">
-                    Powered by DealFlow
+                    Powered by VibeFlow
                 </p>
             </div>
         </div>
