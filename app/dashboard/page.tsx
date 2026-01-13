@@ -1,16 +1,11 @@
 import { createClient } from "@/lib/supabase/server";
-import NewDealDialog from "@/components/NewDealDialog";
-import KanbanBoard from "@/components/KanbanBoard";
 import { Deal, Profile } from "@/types";
-import StatsCards from "@/components/StatsCards";
-import RevenueChart from "@/components/RevenueChart";
-import GoalTracker from "@/components/GoalTracker";
-import InsightsSummary from "@/components/InsightsSummary";
-import { LayoutDashboard, LogOut, TrendingUp, Clock, CheckCircle2, Settings, User, Shield } from "lucide-react";
+import { LayoutDashboard, LogOut, Settings, User, Shield } from "lucide-react";
 import { signOut } from "@/app/auth-actions";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import NewDealDialog from "@/components/NewDealDialog";
+import DashboardContent from "@/components/DashboardContent";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -119,42 +114,12 @@ export default async function DashboardPage() {
                 </div>
             </header>
 
-            <main className="max-w-7xl mx-auto p-4 md:p-8 space-y-10">
-                {/* Analytics Section */}
-                <section className="space-y-6">
-                    <StatsCards deals={typedDeals} />
-
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <div className="lg:col-span-1">
-                            <GoalTracker
-                                currentRevenue={currentMonthRevenue}
-                                goal={typedProfile?.revenue_goal || 0}
-                            />
-                        </div>
-                        <div className="lg:col-span-2">
-                            <InsightsSummary deals={typedDeals} />
-                        </div>
-                    </div>
-
-                    <RevenueChart deals={typedDeals} />
-                </section>
-
-                {typedDeals.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center p-20 bg-card rounded-[32px] border border-border shadow-sm text-center">
-                        <div className="w-20 h-20 bg-secondary rounded-3xl flex items-center justify-center mb-6 text-muted-foreground">
-                            <LayoutDashboard size={40} />
-                        </div>
-                        <h3 className="text-2xl font-black text-foreground tracking-tight">System Offline</h3>
-                        <p className="text-muted-foreground max-w-sm mt-3 font-medium">
-                            Initialize your operational pipeline. Add your first commercial deal to start tracking revenue.
-                        </p>
-                        <div className="mt-8">
-                            <NewDealDialog />
-                        </div>
-                    </div>
-                ) : (
-                    <KanbanBoard deals={typedDeals} />
-                )}
+            <main className="max-w-7xl mx-auto p-4 md:p-8">
+                <DashboardContent
+                    profile={typedProfile}
+                    deals={typedDeals}
+                    currentMonthRevenue={currentMonthRevenue}
+                />
             </main>
         </div>
     );

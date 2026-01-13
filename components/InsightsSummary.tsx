@@ -32,20 +32,20 @@ export default function InsightsSummary({ deals }: InsightsSummaryProps) {
     const COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6'];
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             {/* Average Deal Size Card */}
-            <div className="bg-card border border-border rounded-3xl p-6 shadow-2xl shadow-primary/5">
-                <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest flex items-center gap-2 mb-6">
+            <div className="bg-card border border-border rounded-3xl p-4 md:p-6 shadow-lg shadow-primary/5">
+                <h3 className="text-[10px] md:text-xs font-black text-muted-foreground uppercase tracking-widest flex items-center gap-2 mb-4 md:mb-6">
                     <BadgeDollarSign size={14} className="text-primary" />
                     Market Efficiency
                 </h3>
                 <div className="flex items-baseline gap-2">
-                    <p className="text-4xl font-black text-foreground tracking-tight">
+                    <p className="text-3xl md:text-4xl font-black text-foreground tracking-tight">
                         ${Math.round(avgDealSize).toLocaleString()}
                     </p>
-                    <span className="text-muted-foreground font-bold text-sm">avg. / deal</span>
+                    <span className="text-muted-foreground font-bold text-xs md:text-sm">avg. / deal</span>
                 </div>
-                <p className="text-xs text-muted-foreground mt-4 font-medium leading-relaxed">
+                <p className="text-[10px] md:text-xs text-muted-foreground mt-3 md:mt-4 font-medium leading-relaxed">
                     Based on your historical performance across {deals.length} active campaigns.
                 </p>
             </div>

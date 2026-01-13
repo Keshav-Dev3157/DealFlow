@@ -13,16 +13,16 @@ export default function GoalTracker({ currentRevenue, goal }: GoalTrackerProps) 
     const isComplete = percentage >= 100;
 
     return (
-        <div className="bg-card border border-border rounded-3xl p-6 relative overflow-hidden shadow-2xl shadow-primary/5">
-            <div className="flex items-center justify-between mb-6">
+        <div className="bg-card border border-border rounded-3xl p-4 md:p-6 relative overflow-hidden shadow-lg shadow-primary/5">
+            <div className="flex items-center justify-between mb-4 md:mb-6">
                 <div>
-                    <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest flex items-center gap-2">
+                    <h3 className="text-[10px] md:text-xs font-black text-muted-foreground uppercase tracking-widest flex items-center gap-2">
                         <Target size={14} className="text-primary" />
                         Monthly Objective
                     </h3>
-                    <p className="text-2xl font-black text-foreground mt-1 tracking-tight">
+                    <p className="text-xl md:text-2xl font-black text-foreground mt-1 tracking-tight">
                         ${currentRevenue.toLocaleString()}
-                        <span className="text-muted-foreground/40 text-sm font-bold ml-2">/ ${goal.toLocaleString()}</span>
+                        <span className="text-muted-foreground/40 text-xs md:text-sm font-bold ml-2">/ ${goal.toLocaleString()}</span>
                     </p>
                 </div>
                 <div className={`h-12 w-12 rounded-2xl flex items-center justify-center transition-colors ${isComplete ? 'bg-emerald-500/10 text-emerald-500' : 'bg-primary/10 text-primary'}`}>
@@ -36,8 +36,8 @@ export default function GoalTracker({ currentRevenue, goal }: GoalTrackerProps) 
                     animate={{ width: `${percentage}%` }}
                     transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
                     className={`absolute top-0 left-0 h-full rounded-full transition-all ${isComplete
-                            ? 'bg-gradient-to-r from-emerald-500 to-teal-400 shadow-[0_0_15px_rgba(16,185,129,0.3)]'
-                            : 'bg-gradient-to-r from-primary to-indigo-400'
+                        ? 'bg-gradient-to-r from-emerald-500 to-teal-400 shadow-[0_0_15px_rgba(16,185,129,0.3)]'
+                        : 'bg-gradient-to-r from-primary to-indigo-400'
                         }`}
                 />
             </div>
